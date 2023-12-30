@@ -11,9 +11,6 @@ on:
   workflow_dispatch:
     inputs: {}
 
-env:
-  NODE_ENV: 'production'
-
 jobs:
   build:
 
