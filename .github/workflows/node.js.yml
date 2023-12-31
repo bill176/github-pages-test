@@ -11,9 +11,6 @@ on:
   workflow_dispatch:
     inputs: {}
 
-env:
-  NODE_ENV: production
-
 jobs:
   build:
 
@@ -32,9 +29,11 @@ jobs:
       with:
         node-version: ${{ matrix.node-version }}
     - name: Install the dependencies
-      run: yarn install
+      run: yarn cache clean && yarn install
     - name: Build the project
-      run: yarn run build
+      run: yarn build
+      env:
+        NODE_ENV: production
     - name: Upload the artifact
       uses: actions/upload-pages-artifact@v3
       with:
@@ -45,6 +44,7 @@ jobs:
       id-token: write
     needs: build
     runs-on: ubuntu-latest
+    if: github.ref == 'refs/heads/main'
     environment:
       name: github-pages
       url: ${{steps.deployment.outputs.page_url}}
